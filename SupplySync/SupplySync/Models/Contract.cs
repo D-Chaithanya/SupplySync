@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.ExceptionServices;
 using SupplySync.Constants.Enums;
 
 namespace SupplySync.Models
@@ -17,7 +18,7 @@ namespace SupplySync.Models
 		public virtual Vendor Vendor { get; set; } = null!;
 
 		[Required]
-		public DateTime StartDate { get; set; }
+		public DateTime StartDate { get; set; }  
 
 		[Required]
 		public DateTime EndDate { get; set; }
