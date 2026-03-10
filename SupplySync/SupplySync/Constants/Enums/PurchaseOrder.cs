@@ -1,6 +1,14 @@
-﻿namespace SupplySync.Constants.Enums
+﻿
+
+namespace SupplySync.Constants.Enums
 {
-    public class PurchaseOrder
+    public enum POStatus
     {
+        Draft = 1,
+        Approved = 2,
+        PartiallyDelivered = 3,
+        Delivered = 4,
+        Cancelled = 5
     }
 }
+

@@ -1,6 +1,10 @@
 ﻿namespace SupplySync.Constants.Enums
 {
-    public class Delivery
+    public enum DeliveryStatus
     {
+        Shipped = 1,
+        Delivered = 2,
+        PartiallyDelivered = 3,
+        Rejected = 4
     }
 }
