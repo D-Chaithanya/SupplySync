@@ -16,6 +16,17 @@ namespace SupplySync.Controllers
 		{
 			_contractService = contractService;
 		}
+		/// <summary>
+		/// Contract endpoints
+		/// </summary>
+
+
+		[HttpGet("{contractId}")]
+		public async Task<IActionResult> GetContractById([FromRoute] int contractId)
+		{
+			ContractResponseDto contractResponseDto = await _contractService.GetContractById(contractId);
+			return Ok(contractResponseDto);
+		}
 
 		[HttpPost("")]
 		public async Task<IActionResult> CreateContract([FromBody] CreateContractRequestDto createContractRequestDto)
@@ -24,7 +35,18 @@ namespace SupplySync.Controllers
 			return Ok(contractResponseDto);
 		}
 
-		
+		[HttpPut("{contractId}")]
+		public async Task<IActionResult> UpdateContract([FromRoute] int contractId, UpdateContractRequestDto updateContractRequestDto)
+		{
+			ContractResponseDto contractResponseDto = await _contractService.UpdateContract(contractId ,updateContractRequestDto);
+			return Ok();
+		}
+
+
+
+		/// <summary>
+		/// Contract Terms endpoints
+		/// </summary>
 
 		[HttpPost("{contractId}/terms")]
 		public async Task<IActionResult> CreateContractTerm([FromBody] CreateContractTermRequestDto createContractTermRequestDto)

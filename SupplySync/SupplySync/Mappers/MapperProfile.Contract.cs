@@ -10,6 +10,7 @@ namespace SupplySync.Mappers
 		{
 			CreateMap<CreateContractRequestDto, Contract>().ReverseMap();
 			CreateMap<ContractResponseDto, Contract>().ReverseMap();
+			CreateMap<UpdateContractRequestDto, Contract>().ReverseMap();
 
 			CreateMap<CreateContractTermRequestDto, ContractTerm>().ReverseMap();
 			CreateMap<ContractTermResponseDto, ContractTerm>().ReverseMap();
