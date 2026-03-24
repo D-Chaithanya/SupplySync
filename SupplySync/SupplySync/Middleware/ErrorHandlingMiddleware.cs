@@ -1,10 +1,11 @@
 ﻿using System.Net;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace SupplySync.Middleware
 {
-    public class ErrorHandlingMiddleware
-    {
+	public class ErrorHandlingMiddleware
+	{
 
 		private readonly RequestDelegate _next;
 		private readonly ILogger<ErrorHandlingMiddleware> _logger;
@@ -50,6 +51,7 @@ namespace SupplySync.Middleware
 				ArgumentException => HttpStatusCode.BadRequest,           // 400
 				InvalidOperationException => HttpStatusCode.Conflict,     // 409
 				UnauthorizedAccessException => HttpStatusCode.Unauthorized, // 401
+				DbUpdateException => HttpStatusCode.Conflict,
 				_ => HttpStatusCode.InternalServerError                   // 500 default
 			};
 		}
