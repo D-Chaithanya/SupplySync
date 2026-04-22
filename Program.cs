@@ -52,9 +52,6 @@ builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IReceiptRepository, ReceiptRepository>();
 builder.Services.AddScoped<IVendorCategoryRepository, VendorCategoryRepository>();
 builder.Services.AddScoped<IApprovalWorkflowRepository, ApprovalWorkflowRepository>();
-
-
-// Register new vendor-application repository
 builder.Services.AddScoped<IVendorApplicationRepository, VendorApplicationRepository>();
 
 // --------------------
@@ -81,9 +78,10 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IApprovalWorkflowService, ApprovalWorkflowService>();
 builder.Services.AddScoped<IPurchaseOrderService, PurchaseOrderService>();
 builder.Services.AddScoped<IDeliveryService, DeliveryService>();
-
-// Register vendor-application service
 builder.Services.AddScoped<IVendorApplicationService, VendorApplicationService>();
+
+// Example registration - replace with your actual implementation class
+builder.Services.AddScoped<INotificationDispatcher, NotificationDispatcher>();
 
 // Authorization: single-role requirement handler
 builder.Services.AddSingleton<IAuthorizationHandler, SingleRoleHandler>();

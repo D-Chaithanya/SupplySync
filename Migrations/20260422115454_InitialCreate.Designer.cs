@@ -12,8 +12,8 @@ using SupplySync.Config;
 namespace SupplySync.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260329120833_InitDb")]
-    partial class InitDb
+    [Migration("20260422115454_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,39 @@ namespace SupplySync.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("SupplySync.Models.ApprovalWorkflow", b =>
+                {
+                    b.Property<int>("WorkflowID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WorkflowID"));
+
+                    b.Property<int>("ApproverRole")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Resource")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("WorkflowID");
+
+                    b.ToTable("ApprovalWorkflow");
+                });
 
             modelBuilder.Entity("SupplySync.Models.Audit", b =>
                 {
@@ -242,6 +275,9 @@ namespace SupplySync.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
+                    b.Property<int?>("DeliveryTimelineDays")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -250,6 +286,12 @@ namespace SupplySync.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
+
+                    b.Property<string>("PenaltyClause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("QualityRequirement")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .ValueGeneratedOnAdd()
@@ -288,10 +330,13 @@ namespace SupplySync.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ItemsJson")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("POID")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
@@ -895,6 +940,112 @@ namespace SupplySync.Migrations
                     b.ToTable("Vendor");
                 });
 
+            modelBuilder.Entity("SupplySync.Models.VendorApplication", b =>
+                {
+                    b.Property<int>("ApplicationID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationID"));
+
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContactInfo")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ApplicationID");
+
+                    b.ToTable("VendorApplication");
+                });
+
+            modelBuilder.Entity("SupplySync.Models.VendorApplicationDocument", b =>
+                {
+                    b.Property<int>("DocumentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentID"));
+
+                    b.Property<int>("ApplicationID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DocType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FileURI")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UploadedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("VerificationStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("DocumentID");
+
+                    b.HasIndex("ApplicationID");
+
+                    b.ToTable("VendorApplicationDocument");
+                });
+
+            modelBuilder.Entity("SupplySync.Models.VendorCategoryConfig", b =>
+                {
+                    b.Property<int>("VendorCategoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VendorCategoryID"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("VendorCategoryID");
+
+                    b.ToTable("VendorCategoryConfig");
+                });
+
             modelBuilder.Entity("SupplySync.Models.VendorDocument", b =>
                 {
                     b.Property<int>("DocumentID")
@@ -1167,6 +1318,17 @@ namespace SupplySync.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SupplySync.Models.VendorApplicationDocument", b =>
+                {
+                    b.HasOne("SupplySync.Models.VendorApplication", "Application")
+                        .WithMany("Documents")
+                        .HasForeignKey("ApplicationID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Application");
+                });
+
             modelBuilder.Entity("SupplySync.Models.VendorDocument", b =>
                 {
                     b.HasOne("SupplySync.Models.Vendor", "Vendor")
@@ -1196,6 +1358,11 @@ namespace SupplySync.Migrations
             modelBuilder.Entity("SupplySync.Models.User", b =>
                 {
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("SupplySync.Models.VendorApplication", b =>
+                {
+                    b.Navigation("Documents");
                 });
 
             modelBuilder.Entity("SupplySync.Models.Warehouse", b =>
