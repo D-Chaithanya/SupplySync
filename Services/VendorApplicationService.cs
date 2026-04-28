@@ -86,32 +86,44 @@ namespace SupplySync.Services
             var createdApplication = await _applicationRepo.CreateAsync(application);
 
             // ✅ Notify procurement
-            await _notificationService.SendAsync(
-                new CreateBulkNotificationRequestDto
-                {
-                    Message = $"New vendor application received: {createdApplication.Name}",
-                    Category = NotificationCategory.System,
-                    RoleTypes = new()
+            try
+            {
+                await _notificationService.SendAsync(
+                    new CreateBulkNotificationRequestDto
                     {
+                        Message = $"New vendor application received: {createdApplication.Name}",
+                        Category = NotificationCategory.System,
+                        RoleTypes = new()
+                        {
                 RoleType.ProcurementOfficer
-                    }
-                });
+                        }
+                    });
+            }
+            catch { }
 
             // ✅ Audit log
-            await _auditLogService.WriteAsync(
-                dto.UserID,
-                null,
-                "VendorApplication.Submitted",
-                $"Application:{createdApplication.ApplicationID}");
+            try
+            {
+                await _auditLogService.WriteAsync(
+                    dto.UserID,
+                    null,
+                    "VendorApplication.Submitted",
+                    $"Application:{createdApplication.ApplicationID}");
+            }
+            catch { }
 
             // ✅ Template-based notification
-            await _notificationDispatcher.SendNotificationAsync(
-                NotificationEvent.VendorApplicationSubmitted,
-                new Dictionary<string, object>
-                {
-                    ["VendorName"] = createdApplication.Name
-                }
-            );
+            try
+            {
+                await _notificationDispatcher.SendNotificationAsync(
+                    NotificationEvent.VendorApplicationSubmitted,
+                    new Dictionary<string, object>
+                    {
+                        ["VendorName"] = createdApplication.Name
+                    }
+                );
+            }
+            catch { }
 
             return _mapper.Map<VendorApplicationResponseDto>(createdApplication);
         }

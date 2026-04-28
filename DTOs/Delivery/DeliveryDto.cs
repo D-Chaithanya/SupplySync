@@ -6,20 +6,27 @@ namespace SupplySync.DTOs.Delivery
         public int Quantity { get; set; }
     }
 
+
+    public class DeliveryItemDto
+    {
+        public string Item { get; set; } = string.Empty;
+        public int Quantity { get; set; }
+    }
+
+
     public class CreateDeliveryRequestDto
     {
         public int POID { get; set; }
         public int VendorID { get; set; }
         public DateTime Date { get; set; }
 
-        // legacy single-item support
-        public string Item { get; set; } = string.Empty;
-        public int Quantity { get; set; }
-
-        // preferred: submit multiple items
-        public List<CreateDeliveryItemRequestDto>? Items { get; set; }
+        public List<DeliveryItemDto>? Items { get; set; }
 
         public string Status { get; set; } = "Shipped";
+
+        // Optional flattened fields
+        public string? Item { get; set; }
+        public int Quantity { get; set; }
     }
 
     public class UpdateDeliveryRequestDto
@@ -35,12 +42,9 @@ namespace SupplySync.DTOs.Delivery
         public int POID { get; set; }
         public int VendorID { get; set; }
         public DateTime Date { get; set; }
-        public string Item { get; set; } = string.Empty;
-        public int Quantity { get; set; }
         public string Status { get; set; } = string.Empty;
 
-        // items returned as array (deserialize ItemsJson)
-        public List<CreateDeliveryItemRequestDto>? Items { get; set; }
+        public List<DeliveryItemDto>? Items { get; set; }
     }
 
     public class DeliveryListResponseDto
